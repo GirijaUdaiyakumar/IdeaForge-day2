@@ -1,105 +1,207 @@
-import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import DashboardLayout from '../components/layouts/DashboardLayout';
-import IdeaCard from '../components/IdeaCard';
-import api from '../services/api';
+import { useEffect, useState } from "react";
+import { generateIdea } from "../services/aiService";
+import api from "../services/api";
+import DashboardLayout from "../components/layouts/DashboardLayout";
 
 export default function DashboardPage() {
-  const navigate = useNavigate();
-  const [ideas, setIdeas] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [query, setQuery] = useState('');
-  const [category, setCategory] = useState('');
 
-  const fetchIdeas = async () => {
-    try {
-      setLoading(true);
-      const res = await api.get('/ideas');
-      setIdeas(res.data);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [ideas, setIdeas] = useState([]);
+  const [prompt, setPrompt] = useState("");
+  const [result, setResult] = useState("");
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     fetchIdeas();
   }, []);
 
-  const generateMockIdea = async () => {
-    const samples = [
-      {
-        title: 'Smart Fitness Coach',
-        category: 'Health',
-        problem: 'People lack motivation to stick to workout routines',
-        description: 'AI-driven short daily challenges based on personal data to keep users motivated.',
-      },
-      {
-        title: 'LocalShop Connect',
-        category: 'Marketplace',
-        problem: 'Small shops struggle to reach local online customers',
-        description: 'A hyperlocal marketplace with instant delivery and seller tools.',
-      },
-    ];
-    const pick = samples[Math.floor(Math.random() * samples.length)];
-
+  const fetchIdeas = async () => {
     try {
-      const res = await api.post('/ideas', pick);
-      setIdeas((prev) => [res.data, ...prev]);
+      const res = await api.get("/ideas");
+      setIdeas(res.data);
     } catch (err) {
-      console.error('Failed to save generated idea', err);
+      console.log(err);
     }
   };
 
-  const filtered = ideas.filter((i) => {
-    return (
-      (!query || i.title.toLowerCase().includes(query.toLowerCase()) || i.problem.toLowerCase().includes(query.toLowerCase())) &&
-      (!category || i.category === category)
-    );
-  });
+  const handleGenerate = async () => {
 
-  const handleDelete = async (id) => {
-    if (!window.confirm('Delete this idea?')) return;
+    if (!prompt.trim()) {
+      alert("Enter a prompt");
+      return;
+    }
+
     try {
-      await api.delete(`/ideas/${id}`);
-      setIdeas((prev) => prev.filter((i) => i._id !== id));
+
+      setLoading(true);
+
+      const data =
+      await generateIdea(prompt);
+
+      setResult(data.result);
+
     } catch (err) {
-      console.error(err);
+
+      console.log(err);
+
+      alert("Generation Failed");
+
+    } finally {
+
+      setLoading(false);
+
     }
   };
 
   return (
     <DashboardLayout>
-      <div className="page">
-        <div className="page-header">
+
+      <div className="dashboard-page">
+
+        <div className="dashboard-hero">
+
           <div>
-            <h1>Dashboard</h1>
-            <p>Manage your ideas and generate new concepts with AI.</p>
+            <h1>
+              Welcome Back 👋
+            </h1>
+
+            <p>
+              Build, validate and launch
+              your next startup using AI.
+            </p>
           </div>
-          <div className="page-toolbar">
-            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Search ideas..." />
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
-              <option value="">All Categories</option>
-              <option>Health</option>
-              <option>Marketplace</option>
-              <option>Fintech</option>
-            </select>
-            <button className="button button-primary" onClick={generateMockIdea}>✨ Generate Idea with AI</button>
-          </div>
+
+          <button className="primary-btn">
+            Upgrade Plan
+          </button>
+
         </div>
 
-        {loading ? (
-          <p>Loading...</p>
-        ) : (
-          <div className="idea-grid">
-            {filtered.map((idea) => (
-              <IdeaCard key={idea._id} idea={idea} onEdit={(id) => navigate(`/ideas/edit/${id}`)} onDelete={handleDelete} />
-            ))}
+        <div className="stats-row">
+
+          <div className="metric-card">
+            <h3>Total Ideas</h3>
+            <h2>{ideas.length}</h2>
           </div>
-        )}
+
+          <div className="metric-card">
+            <h3>AI Requests</h3>
+            <h2>{result ? 1 : 0}</h2>
+          </div>
+
+          <div className="metric-card">
+            <h3>Startup Score</h3>
+            <h2>92%</h2>
+          </div>
+
+          <div className="metric-card">
+            <h3>Status</h3>
+            <h2>Active</h2>
+          </div>
+
+        </div>
+
+        <div className="dashboard-grid">
+
+          <div className="generator-card">
+
+            <h2>
+              AI Startup Generator
+            </h2>
+
+            <p>
+              Describe your startup idea
+              and let AI refine it.
+            </p>
+
+            <textarea
+              rows="8"
+              placeholder="Example: Build an AI platform for students..."
+              value={prompt}
+              onChange={(e) =>
+                setPrompt(e.target.value)
+              }
+            />
+
+            <button
+              className="primary-btn generate-btn"
+              onClick={handleGenerate}
+            >
+              {
+                loading
+                ? "Generating..."
+                : "Generate Startup"
+              }
+            </button>
+
+          </div>
+
+          <div className="result-card">
+
+            <h2>
+              Generated Result
+            </h2>
+
+            <div className="result-output">
+
+              {
+                result
+                ? result
+                : "Your AI generated startup idea will appear here."
+              }
+
+            </div>
+
+          </div>
+
+        </div>
+
+        <div className="ideas-section">
+
+          <div className="section-title">
+
+            <h2>
+              Recent Ideas
+            </h2>
+
+          </div>
+
+          <div className="ideas-grid">
+
+            {
+              ideas.length > 0
+              ? ideas.map((idea) => (
+
+                <div
+                  className="startup-card"
+                  key={idea._id}
+                >
+
+                  <h3>
+                    {idea.title}
+                  </h3>
+
+                  <p>
+                    {idea.description}
+                  </p>
+
+                </div>
+
+              ))
+              : (
+                <div className="empty-card">
+
+                  No ideas available yet.
+
+                </div>
+              )
+            }
+
+          </div>
+
+        </div>
+
       </div>
+
     </DashboardLayout>
   );
 }
-

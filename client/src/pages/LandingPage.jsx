@@ -1,77 +1,110 @@
 import { Link } from "react-router-dom";
 
-function LandingPage() {
+export default function LandingPage() {
   return (
-    <div className="landing">
+    <div className="landing-page">
 
-      <nav className="navbar">
-        <div className="logo">
+      <nav className="landing-navbar">
+
+        <div className="brand">
           IdeaForge
         </div>
 
-        <div className="nav-buttons">
+        <div className="nav-links">
+          <a href="#features">Features</a>
+          <a href="#workflow">How It Works</a>
+          <a href="#pricing">Pricing</a>
+        </div>
+
+        <div className="nav-actions">
           <Link to="/login">
-            <button className="btn btn-secondary">
+            <button className="outline-btn">
               Login
             </button>
           </Link>
 
           <Link to="/signup">
-            <button className="btn btn-primary">
+            <button className="primary-btn">
               Get Started
             </button>
           </Link>
         </div>
+
       </nav>
 
-      <section className="hero">
+      <section className="hero-section">
 
-        <div className="hero-left">
+        <div className="hero-content">
 
-          <span className="badge">
-            AI POWERED
+          <span className="hero-badge">
+            AI POWERED STARTUP CREATION
           </span>
 
           <h1>
-            Generate Startup Ideas
-            <span> Instantly</span>
+            Build Your Next
+            <span> Startup </span>
+            With AI
           </h1>
 
           <p>
-            Turn thoughts into startup ideas
-            with AI-powered clarity and build
-            your next innovation faster than ever.
+            Generate startup ideas, validate
+            opportunities, discover revenue
+            models and save everything inside
+            one intelligent platform.
           </p>
 
           <div className="hero-buttons">
-            <button className="btn btn-primary">
-              Get Started
+
+            <Link to="/signup">
+              <button className="primary-btn">
+                Start Building
+              </button>
+            </Link>
+
+            <button className="outline-btn">
+              Watch Demo
             </button>
 
-            <button className="btn btn-secondary">
-              Learn More
-            </button>
           </div>
 
         </div>
 
-        <div className="hero-right">
+        <div className="hero-preview">
 
-          <div className="rocket-card">
+          <div className="preview-card">
 
-            <div className="rocket">
-              🚀
+            <div className="preview-header">
+              AI Startup Generator
             </div>
 
-            <h3>
-              AI Idea Generator
-            </h3>
+            <div className="preview-body">
 
-            <p>
-              Startup concept delivered in
-              seconds with intelligent
-              recommendations.
-            </p>
+              <p>
+                Prompt:
+              </p>
+
+              <div className="fake-input">
+                Generate an EdTech startup...
+              </div>
+
+              <button className="primary-btn">
+                Generate
+              </button>
+
+              <div className="generated-card">
+
+                <h3>
+                  StudySphere
+                </h3>
+
+                <p>
+                  AI powered learning platform
+                  for college students.
+                </p>
+
+              </div>
+
+            </div>
 
           </div>
 
@@ -79,21 +112,45 @@ function LandingPage() {
 
       </section>
 
-      <section className="stats">
+      <section
+        id="features"
+        className="features-section"
+      >
 
-        <div className="stat-card">
-          <h2>500+</h2>
-          <p>Ideas Generated</p>
-        </div>
+        <h2>
+          Everything You Need
+        </h2>
 
-        <div className="stat-card">
-          <h2>Top Rated</h2>
-          <p>By Founders</p>
-        </div>
+        <div className="features-grid">
 
-        <div className="stat-card">
-          <h2>AI Powered</h2>
-          <p>Startup Creation</p>
+          <div className="feature-card">
+            <h3>AI Startup Ideas</h3>
+            <p>
+              Generate innovative ideas instantly.
+            </p>
+          </div>
+
+          <div className="feature-card">
+            <h3>Market Analysis</h3>
+            <p>
+              Validate opportunities using AI.
+            </p>
+          </div>
+
+          <div className="feature-card">
+            <h3>Save Ideas</h3>
+            <p>
+              Build your startup portfolio.
+            </p>
+          </div>
+
+          <div className="feature-card">
+            <h3>Founder Dashboard</h3>
+            <p>
+              Manage ideas in one place.
+            </p>
+          </div>
+
         </div>
 
       </section>
@@ -101,5 +158,3 @@ function LandingPage() {
     </div>
   );
 }
-
-export default LandingPage;
