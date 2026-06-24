@@ -8,7 +8,7 @@ import IdeasPage from "./pages/IdeasPage";
 import AddIdeaPage from "./pages/AddIdeaPage";
 import ProfilePage from "./pages/ProfilePage";
 import NotFoundPage from "./pages/NotFoundPage";
-
+import GenerateIdeaPage from "./pages/GenerateIdeaPage";
 function App() {
   return (
     <BrowserRouter>
@@ -20,6 +20,7 @@ function App() {
         <Route path="/ideas" element={<IdeasPage />} />
         <Route path="/add-idea" element={<AddIdeaPage />} />
         <Route path="/profile" element={<ProfilePage />} />
+        <Route path="/generate-idea" element={<GenerateIdeaPage />} />
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>
