@@ -1,68 +1,117 @@
 # IdeaForge
 
-Turn thoughts into startup ideas with AI-powered clarity — SaaS-style demo.
+## Day 2 Features
 
-## Tech
-- Frontend: React + Vite
-- Backend: Node.js + Express
-- DB: MongoDB (Mongoose)
+* User Authentication
+* Login & Signup
+* MongoDB Database
+* CRUD Operations
+* Dashboard
+* Ideas Management
 
-## Run locally
+---
 
-1. Start MongoDB (local or Atlas). For local MongoDB (Windows service):
+## Day 3 - Add the Brain
 
-```powershell
-net start MongoDB
+### Objective
+
+Integrate a real LLM into IdeaForge.
+
+### SDK Used
+
+```js
+const Groq = require("groq-sdk");
 ```
 
-Or run `mongod` with your dbpath.
+### Environment Variable
 
-2. Start backend
-
-```bash
-cd server
-npm install
-npm start
+```env
+GROQ_API_KEY=your_api_key
 ```
 
-Backend will run on `http://localhost:5000`.
+### Secure Key Handling
 
-3. Start frontend
-
-```bash
-cd client
-npm install
-npm run dev
+```js
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY,
+});
 ```
 
-Frontend (Vite) default: `http://localhost:5173`.
+### Real Model Call
 
-### Run with Docker (quick)
-
-You can run the full stack with Docker Compose (includes MongoDB):
-
-```bash
-docker compose build
-docker compose up
+```js
+const completion =
+await groq.chat.completions.create({
+  messages: [
+    {
+      role: "system",
+      content:
+      "You are an expert startup mentor."
+    },
+    {
+      role: "user",
+      content: prompt
+    }
+  ],
+  model: "llama-3.3-70b-versatile"
+});
 ```
 
-- Frontend will be available at `http://localhost:5173` (served by nginx)
-- Backend API at `http://localhost:5000`
+### API Endpoint
 
-### Deploy
+```http
+POST /api/ai/generate
+```
 
-- Frontend: `client/vercel.json` is included for Vercel static deployments.
-- Server: `server/Dockerfile` provided for containerized deployments.
-- Root `docker-compose.yml` provided for quick staging or local demos.
+### AI Features
 
-## Useful URLs
-- Frontend: http://localhost:5173
-- API root: http://localhost:5000/
-- Ideas API: http://localhost:5000/api/ideas
-- Auth API (MVP): http://localhost:5000/api/auth
+* Startup Idea Generation
+* Prompt Engineering
+* Groq AI Integration
+* Environment Variable Security
 
-## Notes
-- Auth is frontend-level MVP: signup/login endpoints are placeholders and return a mock user. The frontend stores the user in `localStorage`.
-- AI generation is mocked on the frontend and saves to the ideas collection.
+---
 
-*** End of README ***
+## Tech Stack
+
+### Frontend
+
+* React
+* Vite
+* React Router
+
+### Backend
+
+* Node.js
+* Express.js
+* MongoDB
+* Mongoose
+* Groq SDK
+
+---
+
+## Project Structure
+
+```text
+client/
+server/
+  ├── controllers/
+  ├── routes/
+  ├── config/
+```
+
+---
+
+## Completed
+
+✓ Authentication
+
+✓ CRUD Operations
+
+✓ MongoDB Integration
+
+✓ Groq SDK Integration
+
+✓ Real LLM Calls
+
+✓ AI Startup Generator
