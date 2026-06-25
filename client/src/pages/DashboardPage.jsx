@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { generateIdea } from "../services/aiService";
+import generateIdea from "../services/aiService";
 import api from "../services/api";
 import DashboardLayout from "../components/layouts/DashboardLayout";
 
