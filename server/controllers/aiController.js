@@ -1,50 +1,32 @@
-const Groq = require("groq-sdk");
-
-const groq = new Groq({
-  apiKey: process.env.GROQ_API_KEY,
-});
+const { askGroq } = require("../services/groq");
 
 const generateIdea = async (req, res) => {
   try {
-
     const { prompt } = req.body;
 
-    const completion =
-      await groq.chat.completions.create({
-        messages: [
-          {
-            role: "system",
-            content:
-              "You are an expert startup mentor. Generate innovative startup ideas."
-          },
-          {
-            role: "user",
-            content: prompt
-          }
-        ],
-        model: "llama-3.3-70b-versatile"
+    if (!prompt || prompt.trim() === "") {
+      return res.status(400).json({
+        success: false,
+        message: "Prompt is required.",
       });
+    }
 
-    const result =
-      completion.choices[0].message.content;
+    const result = await askGroq(prompt);
 
-    res.json({
+    return res.status(200).json({
       success: true,
-      result
+      data: result,
     });
-
   } catch (error) {
-  console.error(error);
+    console.error("AI Error:", error.message);
 
-  res.status(500).json({
-    success: false,
-    message: "AI Generation Failed"
-  });
-
-
+    return res.status(500).json({
+      success: false,
+      message: "Unable to generate startup idea. Please try again.",
+    });
   }
 };
 
 module.exports = {
-  generateIdea
+  generateIdea,
 };

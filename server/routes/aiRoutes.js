@@ -3,12 +3,9 @@ const express = require("express");
 const router = express.Router();
 
 const {
-  generateIdea
+  generateStartupIdea,
 } = require("../controllers/aiController");
 
-router.post(
-  "/generate",
-  generateIdea
-);
+router.post("/chat", generateStartupIdea);
 
 module.exports = router;

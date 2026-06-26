@@ -115,3 +115,30 @@ server/
 ✓ Real LLM Calls
 
 ✓ AI Startup Generator
+
+# IdeaForge
+
+## Live Demo
+
+Frontend:
+https://your-vercel-link.vercel.app
+
+Backend:
+https://your-render-link.onrender.com
+
+## Features
+
+- AI Startup Generator
+- MongoDB Database
+- Login & Signup
+- Dashboard
+- Landing Page
+- Responsive UI
+
+## Tech Stack
+
+- React
+- Node.js
+- Express
+- MongoDB
+- Groq AI
