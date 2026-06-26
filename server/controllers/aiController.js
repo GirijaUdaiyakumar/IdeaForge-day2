@@ -1,6 +1,6 @@
 const { askGroq } = require("../services/groq");
 
-const generateIdea = async (req, res) => {
+const generateStartupIdea = async (req, res) => {
   try {
     const { prompt } = req.body;
 
@@ -28,5 +28,5 @@ const generateIdea = async (req, res) => {
 };
 
 module.exports = {
-  generateIdea,
+  generateStartupIdea,
 };

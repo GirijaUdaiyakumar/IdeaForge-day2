@@ -2,10 +2,8 @@ const express = require("express");
 
 const router = express.Router();
 
-const {
-  generateStartupIdea,
-} = require("../controllers/aiController");
+const { generateIdea } = require("../controllers/aiController");
 
-router.post("/chat", generateStartupIdea);
+router.post("/chat", generateIdea);
 
 module.exports = router;
