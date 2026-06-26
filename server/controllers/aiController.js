@@ -1,6 +1,6 @@
 const { askGroq } = require("../services/groq");
 
-const generateStartupIdea = async (req, res) => {
+const generateIdea = async (req, res) => {
   try {
     const { prompt } = req.body;
 
@@ -18,15 +18,15 @@ const generateStartupIdea = async (req, res) => {
       data: result,
     });
   } catch (error) {
-    console.error("AI Error:", error.message);
+    console.error("AI Error:", error);
 
     return res.status(500).json({
       success: false,
-      message: "Unable to generate startup idea. Please try again.",
+      message: "Unable to generate startup idea.",
     });
   }
 };
 
 module.exports = {
-  generateStartupIdea,
+  generateIdea,
 };
