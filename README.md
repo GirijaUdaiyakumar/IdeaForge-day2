@@ -142,3 +142,34 @@ https://your-render-link.onrender.com
 - Express
 - MongoDB
 - Groq AI
+
+# IdeaForge
+
+## Live Demo
+
+https://ideaforge-day2.onrender.com
+
+## GitHub Repository
+
+https://github.com/GirijaUdaiyakumar/IdeaForge-day2
+
+## Features
+
+- User Authentication
+- Startup Idea Generator
+- Groq AI Integration
+- MongoDB Atlas
+- Express.js Backend
+- Render Deployment
+
+## API
+
+POST /api/ai/chat
+
+Example
+
+```json
+{
+  "prompt": "AI Fitness App"
+}
+```
