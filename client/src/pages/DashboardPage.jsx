@@ -4,10 +4,9 @@ import api from "../services/api";
 import DashboardLayout from "../components/layouts/DashboardLayout";
 
 export default function DashboardPage() {
-
   const [ideas, setIdeas] = useState([]);
   const [prompt, setPrompt] = useState("");
-  const [result, setResult] = useState("");
+  const [result, setResult] = useState(null);
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -24,7 +23,6 @@ export default function DashboardPage() {
   };
 
   const handleGenerate = async () => {
-
     if (!prompt.trim()) {
       alert("Enter a prompt");
       return;
@@ -32,44 +30,40 @@ export default function DashboardPage() {
 
     try {
       setLoading(true);
+
       const response = await generateIdea(prompt);
+
       if (response.success) {
-    setResult(response.data);
-  } else {
-    alert(response.message);
-  }
-} catch (error) {
-  alert("Something went wrong. Please try again.");
-} finally {
-  setLoading(false);
-}
+        setResult(response.data);
+      } else {
+        alert(response.message);
+      }
+    } catch (error) {
+      console.error(error);
+      alert("Something went wrong. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <DashboardLayout>
-
       <div className="dashboard-page">
-
         <div className="dashboard-hero">
-
           <div>
-            <h1>
-              Welcome Back 👋
-            </h1>
+            <h1>Welcome Back 👋</h1>
 
             <p>
-              Build, validate and launch
-              your next startup using AI.
+              Build, validate and launch your next startup using AI.
             </p>
           </div>
 
           <button className="primary-btn">
             Upgrade Plan
           </button>
-
         </div>
 
         <div className="stats-row">
-
           <div className="metric-card">
             <h3>Total Ideas</h3>
             <h2>{ideas.length}</h2>
@@ -82,118 +76,111 @@ export default function DashboardPage() {
 
           <div className="metric-card">
             <h3>Startup Score</h3>
-            <h2>92%</h2>
+            <h2>{result?.score || "0/10"}</h2>
           </div>
 
           <div className="metric-card">
             <h3>Status</h3>
             <h2>Active</h2>
           </div>
-
         </div>
 
         <div className="dashboard-grid">
-
           <div className="generator-card">
-
-            <h2>
-              AI Startup Generator
-            </h2>
+            <h2>AI Startup Generator</h2>
 
             <p>
-              Describe your startup idea
-              and let AI refine it.
+              Describe your startup idea and let AI refine it.
             </p>
 
             <textarea
               rows="8"
               placeholder="Example: Build an AI platform for students..."
               value={prompt}
-              onChange={(e) =>
-                setPrompt(e.target.value)
-              }
+              onChange={(e) => setPrompt(e.target.value)}
             />
 
             <button
               className="primary-btn generate-btn"
               onClick={handleGenerate}
+              disabled={loading}
             >
-              {
-                loading
-                ? "Generating..."
-                : "Generate Startup"
-              }
+              {loading ? "Generating..." : "Generate Startup"}
             </button>
-
           </div>
 
           <div className="result-card">
-
-            <h2>
-              Generated Result
-            </h2>
+            <h2>Generated Result</h2>
 
             <div className="result-output">
+              {result ? (
+                <>
+                  <h3>{result.title}</h3>
 
-              {
-                result
-                ? result
-                : "Your AI generated startup idea will appear here."
-              }
+                  <p>
+                    <strong>Problem:</strong> {result.problem}
+                  </p>
 
+                  <p>
+                    <strong>Solution:</strong> {result.solution}
+                  </p>
+
+                  <p>
+                    <strong>Audience:</strong> {result.audience}
+                  </p>
+
+                  <p>
+                    <strong>Revenue:</strong> {result.revenue}
+                  </p>
+
+                  <p>
+                    <strong>Tech Stack:</strong> {result.techStack}
+                  </p>
+
+                  <p>
+                    <strong>Growth:</strong> {result.growth}
+                  </p>
+
+                  <p>
+                    <strong>Investment:</strong> {result.investment}
+                  </p>
+
+                  <p>
+                    <strong>Score:</strong> {result.score}
+                  </p>
+                </>
+              ) : (
+                "Your AI generated startup idea will appear here."
+              )}
             </div>
-
           </div>
-
         </div>
 
         <div className="ideas-section">
-
           <div className="section-title">
-
-            <h2>
-              Recent Ideas
-            </h2>
-
+            <h2>Recent Ideas</h2>
           </div>
 
           <div className="ideas-grid">
-
-            {
-              ideas.length > 0
-              ? ideas.map((idea) => (
-
+            {ideas.length > 0 ? (
+              ideas.map((idea) => (
                 <div
                   className="startup-card"
                   key={idea._id}
                 >
+                  <h3>{idea.title}</h3>
 
-                  <h3>
-                    {idea.title}
-                  </h3>
-
-                  <p>
-                    {idea.description}
-                  </p>
-
+                  <p>{idea.description}</p>
                 </div>
-
               ))
-              : (
-                <div className="empty-card">
-
-                  No ideas available yet.
-
-                </div>
-              )
-            }
-
+            ) : (
+              <div className="empty-card">
+                No ideas available yet.
+              </div>
+            )}
           </div>
-
         </div>
-
       </div>
-
     </DashboardLayout>
   );
 }
