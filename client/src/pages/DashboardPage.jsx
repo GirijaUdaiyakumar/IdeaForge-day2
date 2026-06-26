@@ -31,26 +31,18 @@ export default function DashboardPage() {
     }
 
     try {
-
       setLoading(true);
-
-      const data =
-      await generateIdea(prompt);
-
-      setResult(data.result);
-
-    } catch (err) {
-
-      console.log(err);
-
-      alert("Generation Failed");
-
-    } finally {
-
-      setLoading(false);
-
-    }
-  };
+      const response = await generateIdea(prompt);
+      if (response.success) {
+    setResult(response.data);
+  } else {
+    alert(response.message);
+  }
+} catch (error) {
+  alert("Something went wrong. Please try again.");
+} finally {
+  setLoading(false);
+}
 
   return (
     <DashboardLayout>
