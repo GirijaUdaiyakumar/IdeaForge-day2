@@ -1,0 +1,37 @@
+{
+  "name": "IdeaForge AI",
+  "short_name": "IdeaForge",
+  "description": "Transform Ideas into Billion-Dollar Startups with Artificial Intelligence",
+  "start_url": "/dashboard",
+  "display": "standalone",
+  "background_color": "#030712",
+  "theme_color": "#f59e0b",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["productivity", "business", "utilities"],
+  "screenshots": [],
+  "shortcuts": [
+    {
+      "name": "AI Generator",
+      "url": "/generate",
+      "description": "Generate a new startup idea with AI"
+    },
+    {
+      "name": "My Ideas",
+      "url": "/ideas",
+      "description": "View all your startup ideas"
+    },
+    {
+      "name": "AI Chat",
+      "url": "/ai-chat",
+      "description": "Chat with your AI mentor"
+    }
+  ]
+}

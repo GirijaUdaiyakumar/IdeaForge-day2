@@ -2,6 +2,9 @@ const { askGroq, askGroqMessages } = require("../services/groq");
 const Idea = require("../models/Ideas");
 const Chat = require("../models/Chat");
 
+// Helper must be declared BEFORE chatWithAI to avoid const hoisting issues
+const askGroqChat = (messages) => askGroqMessages(messages);
+
 const PERSONA_PROMPTS = {
   mentor: `You are an experienced startup mentor who has helped 200+ founders build billion-dollar companies. 
 You give practical, actionable advice with a warm but direct communication style. 
@@ -332,10 +335,7 @@ const deleteChat = async (req, res) => {
   }
 };
 
-// Helper: chat completion (multi-turn)
-const askGroqChat = async (messages) => {
-  return askGroqMessages(messages);
-};
+// Helper: chat completion (multi-turn) — defined at TOP of file to avoid hoisting issues
 
 module.exports = {
   generateIdea,

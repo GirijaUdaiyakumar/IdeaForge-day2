@@ -1,13 +1,17 @@
 {
-  "name": "ideaforge-day2",
-  "version": "1.0.0",
-  "description": "",
+  "name": "ideaforge-ai",
+  "version": "2.0.0",
+  "description": "IdeaForge AI — Transform Ideas into Billion-Dollar Startups with Artificial Intelligence",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev:server": "cd server && node index.js",
+    "dev:client": "cd client && npm run dev",
+    "build": "cd client && npm run build",
+    "start:server": "cd server && node index.js",
+    "install:all": "cd server && npm install && cd ../client && npm install"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["startup", "ai", "saas", "ideaforge"],
+  "author": "IdeaForge AI",
+  "license": "MIT",
   "type": "commonjs"
 }

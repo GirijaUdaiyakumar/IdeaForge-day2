@@ -1,76 +1,50 @@
-import axios from "axios";
+import api from "./api";
 
-const API_URL = "http://localhost:5000/api/auth";
-
-const login = async (email, password) => {
-  const response = await axios.post(
-    `${API_URL}/login`,
-    {
-      email,
-      password,
-    }
-  );
-
-  if (response.data.token) {
-    localStorage.setItem(
-      "token",
-      response.data.token
-    );
-
-    localStorage.setItem(
-      "user",
-      JSON.stringify(response.data)
-    );
+export const login = async (email, password) => {
+  const { data } = await api.post("/auth/login", { email, password });
+  if (data?.token) {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data));
   }
-
-  return {
-    user: response.data,
-  };
+  return { user: data };
 };
 
-const signup = async (
-  name,
-  email,
-  password
-) => {
-  const response = await axios.post(
-    `${API_URL}/register`,
-    {
-      name,
-      email,
-      password,
-    }
-  );
-
-  if (response.data.token) {
-    localStorage.setItem(
-      "token",
-      response.data.token
-    );
-
-    localStorage.setItem(
-      "user",
-      JSON.stringify(response.data)
-    );
+export const signup = async (name, email, password) => {
+  const { data } = await api.post("/auth/register", { name, email, password });
+  if (data?.token) {
+    localStorage.setItem("token", data.token);
+    localStorage.setItem("user", JSON.stringify(data));
   }
-
-  return {
-    user: response.data,
-  };
+  return { user: data };
 };
 
-const logout = () => {
+export const logout = () => {
   localStorage.removeItem("token");
   localStorage.removeItem("user");
 };
 
-const getCurrentUser = () => {
-  const user =
-    localStorage.getItem("user");
+export const getCurrentUser = () => {
+  try {
+    const stored = localStorage.getItem("user");
+    return stored ? JSON.parse(stored) : null;
+  } catch {
+    return null;
+  }
+};
 
-  return user
-    ? JSON.parse(user)
-    : null;
+export const getProfile = async () => {
+  const { data } = await api.get("/auth/profile");
+  return data;
+};
+
+export const updateProfile = async (updates) => {
+  const { data } = await api.put("/auth/profile", updates);
+  // Update local cache
+  const user = getCurrentUser();
+  if (user) {
+    localStorage.setItem("user", JSON.stringify({ ...user, ...data }));
+  }
+  return data;
 };
 
 const authService = {
@@ -78,6 +52,8 @@ const authService = {
   signup,
   logout,
   getCurrentUser,
+  getProfile,
+  updateProfile,
 };
 
 export default authService;
