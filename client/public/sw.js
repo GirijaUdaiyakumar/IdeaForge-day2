@@ -1,4 +1,4 @@
-const CACHE_NAME = "ideaforge-v3";
+const CACHE_NAME = "ideaforge-v4";
 const PRECACHE = ["/index.html"];
 
 self.addEventListener("install", event => {

@@ -12,11 +12,22 @@ const userRoutes = require("./routes/userRoutes");
 
 const app = express();
 
-// CORS configuration
+// CORS configuration — allow all localhost ports for development
+const allowedOrigins = process.env.CLIENT_URL
+  ? [process.env.CLIENT_URL, "http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000"]
+  : ["http://localhost:5173", "http://localhost:5174", "http://localhost:5175", "http://localhost:3000", "http://127.0.0.1:5173", "http://127.0.0.1:5174", "http://127.0.0.1:5175"];
+
 const corsOptions = {
-  origin: process.env.CLIENT_URL
-    ? [process.env.CLIENT_URL, "http://localhost:5173", "http://localhost:3000"]
-    : ["http://localhost:5173", "http://localhost:3000"],
+  origin: function(origin, callback) {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) return callback(null, true);
+    // Allow any localhost port in development
+    if (origin.match(/^https?:\/\/(localhost|127\.0\.0\.1)(:\d+)?$/)) {
+      return callback(null, true);
+    }
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    callback(new Error("Not allowed by CORS"));
+  },
   credentials: true,
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],

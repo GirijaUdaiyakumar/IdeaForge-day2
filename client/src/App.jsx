@@ -105,9 +105,11 @@ function App() {
 
       <Routes>
         {/* ── Public ── */}
-        <Route path="/"       element={<LandingPage />} />
-        <Route path="/login"  element={<LoginPage />} />
-        <Route path="/signup" element={<SignupPage />} />
+        <Route path="/"             element={<LandingPage />} />
+        <Route path="/landingpage"  element={<LandingPage />} />
+        <Route path="/home"         element={<LandingPage />} />
+        <Route path="/login"        element={<LoginPage />} />
+        <Route path="/signup"       element={<SignupPage />} />
 
         {/* ── Core Workspace ── */}
         <Route path="/dashboard"     element={<PL><DashboardPage /></PL>} />

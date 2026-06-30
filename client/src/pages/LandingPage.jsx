@@ -1,11 +1,31 @@
-import { useState, useRef, lazy, Suspense, useEffect } from "react";
+import { useState, useRef, lazy, Suspense, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
 import { motion, useInView, useScroll, useTransform, AnimatePresence } from "framer-motion";
-import CountUp from "react-countup";
 import { useTypewriter } from "react-simple-typewriter";
 import FloatingParticles from "../components/FloatingParticles";
 
 const HeroScene3D = lazy(() => import("../components/HeroScene3D"));
+
+/* ── Safe animated number (replaces react-countup) ── */
+function AnimatedNumber({ end, suffix = "", duration = 2500, separator = "," }) {
+  const [current, setCurrent] = useState(0);
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true });
+  useEffect(() => {
+    if (!inView) return;
+    const startTime = Date.now();
+    const tick = () => {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCurrent(Math.round(eased * end));
+      if (progress < 1) requestAnimationFrame(tick);
+    };
+    requestAnimationFrame(tick);
+  }, [inView, end, duration]);
+  const formatted = separator ? current.toLocaleString("en-IN") : String(current);
+  return <span ref={ref}>{formatted}{suffix}</span>;
+}
 
 /* ── Animation variants ── */
 const reveal = { hidden: { opacity: 0, y: 28 }, visible: { opacity: 1, y: 0, transition: { duration: 0.65, ease: [0.22, 1, 0.36, 1] } } };
@@ -92,7 +112,6 @@ export default function LandingPage() {
   const { scrollYProgress } = useScroll({
     target: heroRef,
     offset: ["start start", "end start"],
-    layoutEffect: false,
   });
   const heroY  = useTransform(scrollYProgress, [0, 1], ["0%", "20%"]);
   const heroOp = useTransform(scrollYProgress, [0, 0.6], [1, 0]);
@@ -172,7 +191,7 @@ export default function LandingPage() {
             {[{ end: 12400, suffix: "+", label: "Ideas Generated" }, { end: 98, suffix: "%", label: "AI Accuracy" }, { end: 2800, suffix: "+", label: "Founders" }].map(s => (
               <motion.div key={s.label} className="hero-stat" variants={reveal} whileHover={{ y: -4, borderColor: "rgba(245,158,11,0.35)" }}>
                 <div className="hero-stat-value">
-                  <CountUp end={s.end} suffix={s.suffix} duration={2.5} separator="," enableScrollSpy scrollSpyOnce />
+                  <AnimatedNumber end={s.end} suffix={s.suffix} duration={2500} separator="," />
                 </div>
                 <div className="hero-stat-label">{s.label}</div>
               </motion.div>
